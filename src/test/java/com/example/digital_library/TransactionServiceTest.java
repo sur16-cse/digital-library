@@ -1,6 +1,8 @@
 package com.example.digital_library;
 
 import com.example.digital_library.dto.SearchBookRequest;
+import com.example.digital_library.exceptions.BookLimitExceededException;
+import com.example.digital_library.exceptions.BookNotFoundException;
 import com.example.digital_library.model.Book;
 import com.example.digital_library.model.Student;
 import com.example.digital_library.model.Transaction;
@@ -17,9 +19,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionServiceTest {
@@ -102,4 +102,46 @@ public class TransactionServiceTest {
         Assert.assertEquals(finalTxnId, resultTxnId);
         Mockito.verify(transactionRepository, Mockito.times(2)).save(Mockito.any(Transaction.class));
     }
+
+    @Test(expected = BookNotFoundException.class)
+    public void issueTxn_BookNotFoundScenario_Test() throws Exception {
+        String bookName = "ABC";
+        int studentId = 1;
+        Student student = Student.builder().id(studentId).name("Peter").build();
+        Mockito.when(bookService.search((Mockito.any()))).thenReturn(new ArrayList<>());
+        Mockito.when(studentService.get(studentId)).thenReturn(
+                student
+        );
+
+        String resultTxnId = transactionService.issueTxn(bookName, studentId);
+    }
+
+    @Test(expected = BookLimitExceededException.class)
+    public void issueTxn_BookLimitExceedException() throws Exception {
+        String bookName = "ABC";
+        int studentId = 1;
+        List<Book> books = Collections.singletonList(Book.builder().id(1).name(bookName).build());
+        Student student = Student.builder().id(studentId).books(
+                Arrays.asList(
+                        Book.builder().id(4).build(),
+                        Book.builder().id(5).build()
+//                        Book.builder().id(6).build()
+                )
+        ).build();
+
+        Mockito.when(bookService.search(Mockito.any())).thenReturn(books);
+        Mockito.when(studentService.get(studentId)).thenReturn(student);
+        String resultTxnId = transactionService.issueTxn(bookName, studentId);
+
+        Mockito.verify(transactionRepository, Mockito.times(0)).save(Mockito.any());
+        Mockito.verify(bookService, Mockito.times(0)).assignBookToStudent(Mockito.any(), Mockito.any());
+    }
+
+//    public String return_txn() {
+//        int bookId = 1;
+//        int studentId = 1;
+//        String extTransactionId = UUID.randomUUID().toString();
+//        Book book = Book.builder().id(bookId).build();
+//    }
+
 }

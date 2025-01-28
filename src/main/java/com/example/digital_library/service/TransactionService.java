@@ -1,6 +1,8 @@
 package com.example.digital_library.service;
 
 import com.example.digital_library.dto.SearchBookRequest;
+import com.example.digital_library.exceptions.BookLimitExceededException;
+import com.example.digital_library.exceptions.BookNotFoundException;
 import com.example.digital_library.model.Book;
 import com.example.digital_library.model.Student;
 import com.example.digital_library.model.Transaction;
@@ -37,14 +39,14 @@ public class TransactionService {
         try {
             bookList = bookService.search(SearchBookRequest.builder().searchKey("name").searchValue(bookName).operator("=").available(true).build());
         } catch (Exception e) {
-            throw new RuntimeException("Book not found");
+            throw new BookNotFoundException("Book not found");
         }
         Student student = studentService.get(studentId);
         if (student.getBooks() != null && student.getBooks().size() >= max_books_for_issue) {
-            throw new Exception("Book limit exceeded");
+            throw new BookLimitExceededException("Book limit exceeded");
         }
         if (bookList.isEmpty()) {
-            throw new RuntimeException("Not able to find any book with name " + bookName);
+            throw new BookNotFoundException("Not able to find any book with name " + bookName);
         }
         Book book = bookList.get(0);
         Transaction transaction = Transaction.builder().externalTxnId(UUID.randomUUID().toString()).transactionType(TransactionType.ISSUED).student(student).book(book).transactionStatus(TransactionStatus.PENDING).build();
