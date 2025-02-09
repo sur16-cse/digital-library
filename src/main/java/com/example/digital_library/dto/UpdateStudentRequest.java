@@ -1,9 +1,9 @@
 package com.example.digital_library.dto;
 
 import com.example.digital_library.model.Student;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Getter

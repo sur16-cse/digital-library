@@ -4,10 +4,10 @@ import com.example.digital_library.dto.CreateStudentRequest;
 import com.example.digital_library.dto.UpdateStudentRequest;
 import com.example.digital_library.model.Student;
 import com.example.digital_library.service.StudentService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
