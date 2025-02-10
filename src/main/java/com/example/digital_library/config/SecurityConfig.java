@@ -4,6 +4,7 @@ import com.example.digital_library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,6 +24,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.httpBasic().and().authorizeHttpRequests()
+                .antMatchers("/student/id/**").hasAnyAuthority("student")
+                .antMatchers(HttpMethod.GET, "/student/**").hasAnyAuthority("admin")
+                .antMatchers(HttpMethod.POST, "/student/**").permitAll()
+                .antMatchers("/student/**").hasAnyAuthority("student")
+                .antMatchers(HttpMethod.GET, "/book/**").hasAnyAuthority("admin", "student")
+                .antMatchers("/book/**").hasAnyAuthority("admin")
+                .antMatchers("/transaction/**").hasAnyAuthority("student")
+                .antMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority("admin")
+                .and().formLogin();
 
     }
 

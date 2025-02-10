@@ -26,18 +26,29 @@ public class StudentController {
         return studentService.getAll();
     }
 
-    @GetMapping("/id/{studentId}")  // More specific endpoint
-    public Student getStudentById(@PathVariable("studentId") int studentId) {
+    @GetMapping("/{studentId}")
+    public Student getStudentByIdFromAdmin(@PathVariable("studentId") int studentId) {
+        return studentService.get(studentId);
+    }
+
+    @GetMapping("/id")  // More specific endpoint
+    public Student getStudentById() {
+        //TODO Need to add logic for retrieving studentId
+        int studentId = 0;
         return studentService.get(studentId);
     }
 
     @DeleteMapping("/delete")  // More specific endpoint
-    public Student deleteStudent(@RequestParam("id") int studentId) {
+    public Student deleteStudent() {
+        //TODO Need to add logic for retrieving studentId
+        int studentId = 0;
         return studentService.delete(studentId);
     }
 
-    @PutMapping("/update/{studentId}")  // More specific endpoint
-    public Student updateStudent(@PathVariable("studentId") int studentId, @RequestBody @Valid UpdateStudentRequest updateStudentRequest) {
+    @PutMapping("/update")  // More specific endpoint
+    public Student updateStudent(@RequestBody @Valid UpdateStudentRequest updateStudentRequest) {
+        //TODO Need to add logic for retrieving studentId
+        int studentId = 0;
         return studentService.update(studentId, updateStudentRequest);
     }
 }
