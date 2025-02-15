@@ -21,7 +21,7 @@ public class StudentService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Value("{student.authorities}")
+    @Value("${student.authorities}")
     String authorities;
 
     @Autowired

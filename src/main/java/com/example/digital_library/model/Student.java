@@ -22,17 +22,18 @@ public class Student {
     private String name;
     private String contact;
     @OneToMany(mappedBy = "student")
-    @JsonIgnoreProperties({"student"})
+    @JsonIgnoreProperties(value = {"student"})
     private List<Book> books;
     @OneToMany(mappedBy = "student")
-    @JsonIgnoreProperties({"student"})
+    @JsonIgnoreProperties(value = {"student"})
     private List<Transaction> transactionList;
-    @OneToOne
-    @JoinColumn(name = "username")
-    private SecuredUser securedUser;
     @CreationTimestamp
     private Date createdOn;
     @UpdateTimestamp
     private Date updatedOn;
     private Date cardValidOn;
+    @OneToOne
+    @JoinColumn
+    @JsonIgnoreProperties(value = {"student"})
+    private SecuredUser securedUser;
 }

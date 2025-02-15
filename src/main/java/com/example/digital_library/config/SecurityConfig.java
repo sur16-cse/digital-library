@@ -24,15 +24,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().and().authorizeHttpRequests()
-                .antMatchers("/student/id/**").hasAnyAuthority("student")
-                .antMatchers(HttpMethod.GET, "/student/**").hasAnyAuthority("admin")
+        http.httpBasic().and()
+                .csrf().disable()
+                .authorizeHttpRequests()
+                .antMatchers("/student/id/**").hasAnyAuthority("get-student-profile")
+                .antMatchers(HttpMethod.GET, "/student/**").hasAnyAuthority("get-student-details")
                 .antMatchers(HttpMethod.POST, "/student/**").permitAll()
-                .antMatchers("/student/**").hasAnyAuthority("student")
-                .antMatchers(HttpMethod.GET, "/book/**").hasAnyAuthority("admin", "student")
-                .antMatchers("/book/**").hasAnyAuthority("admin")
-                .antMatchers("/transaction/**").hasAnyAuthority("student")
-                .antMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority("admin")
+                .antMatchers("/student/**").hasAnyAuthority("update-student-account")
+                .antMatchers(HttpMethod.GET, "/book/**").hasAnyAuthority("get-book-details")
+                .antMatchers("/book/**").hasAnyAuthority("update-book")
+                .antMatchers("/transaction/**").hasAnyAuthority("book-transaction")
+                .antMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority("add-admin")
                 .and().formLogin();
 
     }

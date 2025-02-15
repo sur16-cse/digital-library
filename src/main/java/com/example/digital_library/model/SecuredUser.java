@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 public class SecuredUser implements UserDetails {
-    private final static String AUTHORITIES_DELIMETER = "::";
+    private final static String AUTHORITIES_DELIMITER = "::";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,7 +42,7 @@ public class SecuredUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String[] authoritiesList = this.authorities.split(AUTHORITIES_DELIMETER);
+        String[] authoritiesList = this.authorities.split(AUTHORITIES_DELIMITER);
         return Arrays.stream(authoritiesList)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
@@ -50,31 +50,31 @@ public class SecuredUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return this.username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

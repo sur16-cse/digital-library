@@ -1,5 +1,6 @@
 package com.example.digital_library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -21,7 +22,8 @@ public class Admin {
     private String name;
 
     @OneToOne
-    @JoinColumn(name = "username")
+    @JoinColumn
+    @JsonIgnoreProperties(value = {"admin"})
     private SecuredUser securedUser;
 
     @CreationTimestamp
