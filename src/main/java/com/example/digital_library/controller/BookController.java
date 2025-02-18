@@ -5,10 +5,10 @@ import com.example.digital_library.dto.DeleteBookResponse;
 import com.example.digital_library.dto.SearchBookRequest;
 import com.example.digital_library.model.Book;
 import com.example.digital_library.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController

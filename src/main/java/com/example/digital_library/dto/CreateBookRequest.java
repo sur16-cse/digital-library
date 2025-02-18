@@ -3,10 +3,10 @@ package com.example.digital_library.dto;
 import com.example.digital_library.model.Author;
 import com.example.digital_library.model.Book;
 import com.example.digital_library.model.enums.Genre;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Builder
