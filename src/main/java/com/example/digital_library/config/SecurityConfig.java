@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,14 +22,6 @@ public class SecurityConfig {
     private UserService userService;
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
@@ -37,7 +29,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/student/id/**").hasAuthority("get-student-profile")
                         .requestMatchers(HttpMethod.GET, "/student/**").hasAuthority("get-student-details")
@@ -48,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/transaction/**").hasAuthority("book-transaction")
                         .requestMatchers(HttpMethod.POST, "/admin/**").hasAuthority("add-admin")
                 )
-                .formLogin(form -> form.permitAll());
+                .formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults());
 
         return http.build();
     }

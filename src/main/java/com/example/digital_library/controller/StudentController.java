@@ -35,15 +35,16 @@ public class StudentController {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         SecuredUser securedUser = (SecuredUser) authentication.getPrincipal();
-        return studentService.get(studentId);
+        return studentService.getUsingCache(studentId);
     }
 
     @GetMapping("/id")  // More specific endpoint
     public Student getStudentById() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         SecuredUser securedUser = (SecuredUser) authentication.getPrincipal();
+        System.out.println(securedUser + "securedUser");
         int studentId = securedUser.getStudent().getId();
-        return studentService.get(studentId);
+        return studentService.getUsingCache(studentId);
     }
 
     @DeleteMapping("/delete")  // More specific endpoint

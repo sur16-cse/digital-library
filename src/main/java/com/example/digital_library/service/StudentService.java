@@ -4,6 +4,7 @@ import com.example.digital_library.dto.CreateStudentRequest;
 import com.example.digital_library.dto.UpdateStudentRequest;
 import com.example.digital_library.model.SecuredUser;
 import com.example.digital_library.model.Student;
+import com.example.digital_library.repository.StudentCacheRepository;
 import com.example.digital_library.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,9 @@ public class StudentService {
     @Autowired
     UserService userService;
 
+    @Autowired
+    StudentCacheRepository studentCacheRepository;
+
     public Student create(CreateStudentRequest createStudentRequest) {
         Student student = createStudentRequest.to();
         SecuredUser securedUser = student.getSecuredUser();
@@ -42,6 +46,16 @@ public class StudentService {
 
     public Student get(int id) {
         return studentRepository.findById(id).orElse(null);
+    }
+
+    public Student getUsingCache(int studentId) {
+        Student student = studentCacheRepository.get(studentId);
+        if (student == null) {
+            student = studentRepository.findById(studentId).orElse(null);
+            assert student != null;
+            studentCacheRepository.set(student);
+        }
+        return student;
     }
 
     public Student delete(int studentId) {
