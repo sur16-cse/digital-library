@@ -1,6 +1,7 @@
 package com.example.digital_library.controller;
 
 import com.example.digital_library.dto.CreateStudentRequest;
+import com.example.digital_library.dto.GetStudentResponse;
 import com.example.digital_library.dto.UpdateStudentRequest;
 import com.example.digital_library.model.SecuredUser;
 import com.example.digital_library.model.Student;
@@ -35,11 +36,11 @@ public class StudentController {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         SecuredUser securedUser = (SecuredUser) authentication.getPrincipal();
-        return studentService.getUsingCache(studentId);
+        return studentService.get(studentId);
     }
 
     @GetMapping("/id")  // More specific endpoint
-    public Student getStudentById() {
+    public GetStudentResponse getStudentById() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         SecuredUser securedUser = (SecuredUser) authentication.getPrincipal();
         System.out.println(securedUser + "securedUser");

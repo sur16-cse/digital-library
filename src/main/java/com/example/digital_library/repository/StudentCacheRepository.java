@@ -1,6 +1,6 @@
 package com.example.digital_library.repository;
 
-import com.example.digital_library.model.Student;
+import com.example.digital_library.dto.GetStudentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,7 @@ public class StudentCacheRepository {
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
 
-    public void set(Student student) {
+    public void set(GetStudentResponse student) {
         if (student.getId() == 0) {
             return;
         }
@@ -23,12 +23,12 @@ public class StudentCacheRepository {
         redisTemplate.opsForValue().set(key, student, 3600, TimeUnit.SECONDS);
     }
 
-    public Student get(int studentId) {
+    public GetStudentResponse get(int studentId) {
         if (studentId == 0) {
             return null;
         }
 
         String key = STUDENT_KEY_PREFIX + studentId;
-        return (Student) redisTemplate.opsForValue().get(key);
+        return (GetStudentResponse) redisTemplate.opsForValue().get(key);
     }
 }

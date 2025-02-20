@@ -1,6 +1,7 @@
 package com.example.digital_library.service;
 
 import com.example.digital_library.dto.CreateStudentRequest;
+import com.example.digital_library.dto.GetStudentResponse;
 import com.example.digital_library.dto.UpdateStudentRequest;
 import com.example.digital_library.model.SecuredUser;
 import com.example.digital_library.model.Student;
@@ -48,14 +49,15 @@ public class StudentService {
         return studentRepository.findById(id).orElse(null);
     }
 
-    public Student getUsingCache(int studentId) {
-        Student student = studentCacheRepository.get(studentId);
-        if (student == null) {
-            student = studentRepository.findById(studentId).orElse(null);
+    public GetStudentResponse getUsingCache(int studentId) {
+        GetStudentResponse studentResponse = studentCacheRepository.get(studentId);
+        if (studentResponse == null) {
+            Student student = studentRepository.findById(studentId).orElse(null);
             assert student != null;
-            studentCacheRepository.set(student);
+            studentResponse = new GetStudentResponse(student);
+            studentCacheRepository.set(studentResponse);
         }
-        return student;
+        return studentResponse;
     }
 
     public Student delete(int studentId) {
